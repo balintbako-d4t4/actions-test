@@ -21,6 +21,7 @@ env:
 jobs:
   dev:
     name: 'Dev'
+    runs-on: ubuntu-latest
     environment: dev
     defaults:
       run:
@@ -35,4 +36,4 @@ jobs:
 
     - id: 'updatepvcsettings'
       name: 'Update PVC settings'
-      #run: echo "kubectl -n celebrus patch pvc '${{ inputs.pvc_name }}' --type='merge' -p '{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}"
+      run: echo "kubectl -n celebrus patch pvc '${{ inputs.pvc_name }}' --type='merge' -p '{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}"
