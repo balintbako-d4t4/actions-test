@@ -1,0 +1,48 @@
+name: 'xx - Resize PVC'
+on:
+  workflow_dispatch:
+    inputs: #On Input
+      dev:
+        type: boolean
+        description: dev
+        default: true    
+      prod:
+        type: boolean
+        description: prod
+        default: false
+      pvc_name:
+        type: string
+        required: true
+      pvc_size:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  GKE_REGION: "us-central1"
+  GKE_ZONE: "us-central1-a"
+  GKE_NAMESPACE: "celebrus"  
+  
+jobs:
+  dev:
+    name: 'Dev'
+    if: ${{inputs.dev == true }}
+    environment: dev
+    defaults:
+      run:
+        shell: bash
+    env:
+      GCP_PROJECT: "hca-dsc-dev"
+      GKE_NAME: "cel-dev-gke-celebrus"
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - id: 'updatepvcsettings'
+      name: 'Update PVC settings'
+      #run: echo "kubectl -n celebrus patch pvc '${{ inputs.pvc_name }}' --type='merge' -p '{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}'"
+      run: echo "{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}"
