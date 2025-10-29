@@ -2,14 +2,6 @@ name: 'xx - Resize PVC'
 on:
   workflow_dispatch:
     inputs: #On Input
-      dev:
-        type: boolean
-        description: dev
-        default: true    
-      prod:
-        type: boolean
-        description: prod
-        default: false
       pvc_name:
         type: string
         required: true
@@ -29,7 +21,6 @@ env:
 jobs:
   dev:
     name: 'Dev'
-    if: ${{inputs.dev == true }}
     environment: dev
     defaults:
       run:
@@ -44,5 +35,4 @@ jobs:
 
     - id: 'updatepvcsettings'
       name: 'Update PVC settings'
-      #run: echo "kubectl -n celebrus patch pvc '${{ inputs.pvc_name }}' --type='merge' -p '{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}'"
-      run: echo "{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}"
+      #run: echo "kubectl -n celebrus patch pvc '${{ inputs.pvc_name }}' --type='merge' -p '{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"${{ inputs.pvc_size }}\"}}}}"
